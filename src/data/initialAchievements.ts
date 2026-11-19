@@ -1,0 +1,152 @@
+import { Achievement } from '../types';
+
+export const INITIAL_ACHIEVEMENTS: Achievement[] = [
+  {
+    id: 'ach-first-workout',
+    slug: 'first-blood',
+    title: 'First Blood',
+    description: 'Complete your first structured workout session in the Training System.',
+    category: 'workouts',
+    icon: 'Trophy',
+    points: 50,
+    threshold: 1,
+    isUnlocked: true,
+    unlockedAt: '2026-11-10T14:22:00Z',
+    progress: 100
+  },
+  {
+    id: 'ach-3-day-streak',
+    slug: 'momentum-spark',
+    title: 'Momentum Spark',
+    description: 'Maintain a 3-day consecutive training or mobility streak.',
+    category: 'streak',
+    icon: 'Flame',
+    points: 75,
+    threshold: 3,
+    isUnlocked: true,
+    unlockedAt: '2026-11-13T10:15:00Z',
+    progress: 100
+  },
+  {
+    id: 'ach-7-day-streak',
+    slug: 'iron-discipline',
+    title: 'Iron Discipline',
+    description: 'Achieve a full 7-day uninterrupted workout streak.',
+    category: 'streak',
+    icon: 'Zap',
+    points: 150,
+    threshold: 7,
+    isUnlocked: false,
+    progress: 57 // 4 of 7
+  },
+  {
+    id: 'ach-10-workouts',
+    slug: 'dedication-club',
+    title: 'Tenacious Ten',
+    description: 'Log 10 complete training sessions.',
+    category: 'workouts',
+    icon: 'Award',
+    points: 100,
+    threshold: 10,
+    isUnlocked: false,
+    progress: 60 // 6 of 10
+  },
+  {
+    id: 'ach-tonnage-10k',
+    slug: 'tonnage-warrior',
+    title: '10,000 kg Club',
+    description: 'Lift a cumulative total of 10,000 kilograms in training volume.',
+    category: 'volume',
+    icon: 'Dumbbell',
+    points: 200,
+    threshold: 10000,
+    isUnlocked: true,
+    unlockedAt: '2026-11-18T18:40:00Z',
+    progress: 100
+  },
+  {
+    id: 'ach-tonnage-50k',
+    slug: 'behemoth-lifter',
+    title: '50,000 kg Titan',
+    description: 'Amass 50,000 kilograms of total recorded volume.',
+    category: 'volume',
+    icon: 'Shield',
+    points: 500,
+    threshold: 50000,
+    isUnlocked: false,
+    progress: 32 // ~16,000 of 50,000
+  },
+  {
+    id: 'ach-manual-scholar',
+    slug: 'manual-scholar',
+    title: 'Tactical Scholar',
+    description: 'Read and complete all 7 chapters of the Training Manual.',
+    category: 'knowledge',
+    icon: 'BookOpen',
+    points: 150,
+    threshold: 7,
+    isUnlocked: false,
+    progress: 42 // 3 of 7
+  },
+  {
+    id: 'ach-calisthenics-master',
+    slug: 'gravity-defier',
+    title: 'Gravity Defier',
+    description: 'Complete 5 bodyweight calisthenics training sessions.',
+    category: 'mastery',
+    icon: 'Feather',
+    points: 120,
+    threshold: 5,
+    isUnlocked: false,
+    progress: 40
+  },
+  {
+    id: 'ach-early-bird',
+    slug: 'dawn-raider',
+    title: 'Dawn Raider',
+    description: 'Complete a workout session before 7:00 AM.',
+    category: 'mastery',
+    icon: 'Sun',
+    points: 80,
+    threshold: 1,
+    isUnlocked: true,
+    unlockedAt: '2026-11-15T06:35:00Z',
+    progress: 100
+  },
+  {
+    id: 'ach-pr-crusher',
+    slug: 'pr-breaker',
+    title: 'Record Breaker',
+    description: 'Set 5 personal record improvements in compound lifts.',
+    category: 'mastery',
+    icon: 'TrendingUp',
+    points: 250,
+    threshold: 5,
+    isUnlocked: false,
+    progress: 60 // 3 of 5
+  },
+  {
+    id: 'ach-cardio-engine',
+    slug: 'aerobic-dynamo',
+    title: 'Aerobic Dynamo',
+    description: 'Complete 100 total minutes of cardio training intervals.',
+    category: 'volume',
+    icon: 'Activity',
+    points: 180,
+    threshold: 100,
+    isUnlocked: false,
+    progress: 65
+  },
+  {
+    id: 'ach-centurion',
+    slug: 'centurion',
+    title: 'The Centurion',
+    description: 'Complete 100 total workouts. Elite athletic status.',
+    category: 'workouts',
+    icon: 'Crown',
+    points: 1000,
+    threshold: 100,
+    isUnlocked: false,
+    progress: 6
+  }
+];

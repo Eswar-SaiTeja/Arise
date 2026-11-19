@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-background: 10 7 19;
+    --color-surface: 18 13 34;
+    --color-accent: #A855F7;
+    --color-accent-rgb: 168, 85, 247;
+    --color-secondary-accent: #C4B5FD;
+    --color-glow: rgba(168, 85, 247, 0.45);
+    --color-dark-bg: #0A0713;
+    --color-card-bg: #120D22;
+    --color-border: #25183E;
+  }
+
+  /* Smooth Dynamic Theme Transitions */
+  html, body, main, aside, header, nav, button, div {
+    transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 250ms;
+  }
+
+  body {
+    background-color: #090B10;
+    color: #F3F4F6;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+    padding-bottom: 0px;
+    overscroll-behavior-y: none;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Custom subtle dark scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #090B10;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #252D3E;
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00F050;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background: rgba(20, 25, 35, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .glass-panel-elevated {
+    background: rgba(28, 35, 51, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .text-glow-lime {
+    text-shadow: 0 0 16px rgba(0, 240, 80, 0.5);
+  }
+
+  /* Mobile Safe Area & Touch Utilities */
+  .pb-safe {
+    padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+  }
+  .pt-safe {
+    padding-top: max(12px, env(safe-area-inset-top, 12px));
+  }
+  .pl-safe {
+    padding-left: max(12px, env(safe-area-inset-left, 12px));
+  }
+  .pr-safe {
+    padding-right: max(12px, env(safe-area-inset-right, 12px));
+  }
+
+  .min-h-screen-safe {
+    min-height: calc(100vh - env(safe-area-inset-bottom, 0px) - env(safe-area-inset-top, 0px));
+  }
+
+  /* Touch Target Utility - minimum 44px */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
