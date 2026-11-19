@@ -29,6 +29,7 @@ import { OnboardingWizard } from './components/auth/OnboardingWizard';
 import { Exercise, WorkoutDayPlan } from './types';
 import { storageService } from './services/storageService';
 import { notificationService } from './services/notificationService';
+import { mobileService } from './services/mobileService';
 import { BrandProvider, useBrand } from './context/BrandContext';
 
 const MainApp: React.FC = () => {
@@ -54,6 +55,16 @@ const MainApp: React.FC = () => {
     notificationService.startReminderScheduler();
     return () => notificationService.stopReminderScheduler();
   }, []);
+
+  // Native Mobile runtime initialization (Status bar, splash screen, keyboard, network)
+  useEffect(() => {
+    mobileService.initialize();
+  }, []);
+
+  // Synchronize native Status Bar color with active theme
+  useEffect(() => {
+    mobileService.setStatusBarColor(currentTheme.accentColor);
+  }, [currentTheme]);
 
   // If user is not yet onboarded, display the 5-step wizard
   if (!isOnboarded) {

@@ -1,6 +1,7 @@
 import { hunterService } from './hunterService';
 import { storageService } from './storageService';
 import { nutritionStorage } from './nutritionStorage';
+import { mobileService } from './mobileService';
 
 export class NotificationService {
   private timerId: number | null = null;
@@ -87,8 +88,10 @@ export class NotificationService {
     const storedTheme = (typeof localStorage !== 'undefined' ? localStorage.getItem('ascend_brand_theme') || 'normal' : 'normal').toLowerCase();
     const modeName = (storedTheme === 'easy' || storedTheme === 'ascend') ? 'EASY MODE' : (storedTheme === 'hell' || storedTheme === 'titan') ? 'HELL MODE' : 'NORMAL MODE';
 
-    // 1. Dispatch Web / Desktop Notification
-    if (this.isPermissionGranted()) {
+    // 1. Dispatch Web / Desktop Notification or Native Mobile Notification
+    if (mobileService.isNativeMobile()) {
+      mobileService.scheduleLocalNotification(`${modeName} Directive Protocol`, randomMsg);
+    } else if (this.isPermissionGranted()) {
       try {
         new Notification(`${modeName} Directive Protocol`, {
           body: randomMsg,

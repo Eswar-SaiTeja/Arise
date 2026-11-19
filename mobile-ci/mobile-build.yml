@@ -1,0 +1,144 @@
+name: Project Ascend — Android & iOS Mobile CI/CD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'android/**'
+      - 'ios/**'
+      - 'capacitor.config.ts'
+      - 'package.json'
+      - '.github/workflows/mobile-build.yml'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build Type (debug / release)'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - both
+          - debug_only
+          - release_only
+
+jobs:
+  # =========================================================================
+  # 1. ANDROID PRODUCTION & TEST BUILDS (APK + AAB)
+  # =========================================================================
+  build-android:
+    name: Build Android (APK & AAB)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Setup Java JDK 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Sync Web Build & Native Plugins to Android
+        run: npx cap sync android
+
+      - name: Grant Execute Permissions for Gradle Wrapper
+        run: chmod +x android/gradlew
+
+      # A. Build Debug APK for Direct Device Installation & QA
+      - name: Build Android Debug APK
+        if: ${{ github.event.inputs.build_type != 'release_only' }}
+        run: |
+          cd android
+          ./gradlew assembleDebug --stacktrace
+
+      # B. Build Production Release AAB for Google Play Store Submission
+      - name: Build Android Release Bundle (AAB)
+        if: ${{ github.event.inputs.build_type != 'debug_only' }}
+        run: |
+          cd android
+          ./gradlew bundleRelease --stacktrace
+
+      # C. Upload Debug APK Artifact
+      - name: Upload Debug APK Artifact
+        if: ${{ github.event.inputs.build_type != 'release_only' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-ascend-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      # D. Upload Release AAB Artifact
+      - name: Upload Release AAB Artifact
+        if: ${{ github.event.inputs.build_type != 'debug_only' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-ascend-release-aab
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 30
+
+  # =========================================================================
+  # 2. iOS PRODUCTION & TEST BUILDS (Xcode Archive & IPA)
+  # =========================================================================
+  build-ios:
+    name: Build iOS (Xcode Archive)
+    runs-on: macos-14
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Select Xcode 15 / 16
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Sync Web Build & Native Plugins to iOS
+        run: npx cap sync ios
+
+      - name: Build iOS Project (Simulator / Device Validation)
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Upload iOS Xcode Archive Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: project-ascend-ios-build
+          path: ios/App/build/
+          if-no-files-found: ignore
+          retention-days: 14
